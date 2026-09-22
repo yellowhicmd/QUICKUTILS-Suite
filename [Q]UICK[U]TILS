@@ -1,0 +1,369 @@
+@echo off
+setlocal enabledelayedexpansion
+chcp 65001 >nul
+cls
+title QUICKUTILS TERMINAL LAUNCHER v1.0
+
+:: Enable ANSI Escape Sequences
+for /f "tokens=2 delims=#" %%a in ('"prompt #$H#$E# & echo on & for %%b in (1) do rem"') do set "ESC=%%a"
+set "RESET=%ESC%[0m"
+set "BLUE=%ESC%[94m"
+set "CYAN=%ESC%[96m"
+set "YELLOW=%ESC%[93m"
+set "RED=%ESC%[91m"
+set "MAGENTA=%ESC%[95m"
+set "GREEN=%ESC%[92m"
+set "WHITE=%ESC%[97m"
+set "GRAY=%ESC%[90m"
+set "BOLD=%ESC%[1m"
+
+:MENU
+cls
+echo %BLUE%
+echo  ===================================================================================================
+echo  %CYAN%%BOLD%
+echo   [Q]UICK [U]TILS   --   SYSTEM UTILITY SUITE
+echo %BLUE%
+echo  ===================================================================================================%RESET%
+echo %BLUE%  ---------------------------------------------------------------------------------------------------%RESET%
+echo   %GRAY%[%CYAN%1%GRAY%]%RESET% %WHITE%System Info%RESET%
+echo   %GRAY%[%CYAN%2%GRAY%]%RESET% %WHITE%Ping Diagnostics%RESET%
+echo   %GRAY%[%CYAN%3%GRAY%]%RESET% %WHITE%Flush DNS Cache%RESET%
+echo   %GRAY%[%CYAN%4%GRAY%]%RESET% %WHITE%User Temp Cleanup%RESET%
+echo   %GRAY%[%CYAN%5%GRAY%]%RESET% %WHITE%Folder Backup Utility%RESET%
+echo   %GRAY%[%CYAN%6%GRAY%]%RESET% %WHITE%Winget Package Updater%RESET%
+echo   %GRAY%[%CYAN%7%GRAY%]%RESET% %WHITE%Live Battery Monitor%RESET%
+echo   %GRAY%[%CYAN%8%GRAY%]%RESET% %WHITE%Quick Windows Tools%RESET%
+echo   %GRAY%[%CYAN%9%GRAY%]%RESET% %WHITE%Web Shortcuts%RESET%
+echo   %GRAY%[%CYAN%10%GRAY%]%RESET% %WHITE%Saved Wi-Fi Passwords%RESET%
+echo   %GRAY%[%CYAN%11%GRAY%]%RESET% %WHITE%RAM Cleaner ^& Process Manager%RESET%
+echo   %GRAY%[%CYAN%12%GRAY%]%RESET% %WHITE%Drive Storage Space%RESET%
+echo   %GRAY%[%CYAN%13%GRAY%]%RESET% %WHITE%System Quick Toggles%RESET%
+echo %BLUE%  ---------------------------------------------------------------------------------------------------%RESET%
+echo   %GRAY%[%MAGENTA%R%GRAY%]%RESET% %WHITE%Refresh Menu%RESET%  ^|  %GRAY%[%MAGENTA%A%GRAY%]%RESET% %WHITE%About%RESET%  ^|  %GRAY%[%MAGENTA%X%GRAY%]%RESET% %WHITE%Exit%RESET%
+echo %BLUE%  ===================================================================================================%RESET%
+echo.
+set /p choice="%CYAN%%BOLD%QUICKUTILS-SHELL%RESET% %GRAY%^>%RESET% "
+
+if /i "%choice%"=="X" exit /b
+if /i "%choice%"=="R" goto MENU
+if /i "%choice%"=="A" goto ABOUT
+if "%choice%"=="1" call :SYS_INFO & goto MENU
+if "%choice%"=="2" call :PING_DIAG & goto MENU
+if "%choice%"=="3" call :FLUSH_DNS & goto MENU
+if "%choice%"=="4" call :TEMP_CLEAN & goto MENU
+if "%choice%"=="5" call :FOLDER_BACKUP & goto MENU
+if "%choice%"=="6" call :WINGET_UPDATE & goto MENU
+if "%choice%"=="7" call :BATTERY_MON & goto MENU
+if "%choice%"=="8" call :WIN_TOOLS & goto MENU
+if "%choice%"=="9" call :WEB_SHORTCUTS & goto MENU
+if "%choice%"=="10" call :WIFI_PASS & goto MENU
+if "%choice%"=="11" call :RAM_CLEANER & goto MENU
+if "%choice%"=="12" call :DRIVE_SPACE & goto MENU
+if "%choice%"=="13" call :QUICK_TOGGLES & goto MENU
+
+echo %RED%[!] Invalid selection.%RESET%
+timeout /t 1 >nul
+goto MENU
+
+:ABOUT
+cls
+echo %BLUE%===================================================================================
+echo %CYAN%%BOLD%                     ABOUT QUICKUTILS                                       
+echo %BLUE%===================================================================================%RESET%
+echo.
+echo   %WHITE%Suite Name   :%RESET% %CYAN%QUICKUTILS Terminal Launcher v1.0%RESET%
+echo   %WHITE%Created By   :%RESET% %GREEN%yellowhicmd%RESET%
+echo   %WHITE%Theme        :%RESET% %BLUE%Cyberpunk Blue / ANSI UTF-8%RESET%
+echo   %WHITE%Repository   :%RESET% %GRAY%https://github.com/yellowhicmd/QUICKUTILS-Suite%RESET%
+echo.
+echo %BLUE%===================================================================================%RESET%
+echo.
+echo Press any key to return to launcher...
+pause >nul
+goto MENU
+
+:: ===================================================================================
+:: SUBROUTINES
+:: ===================================================================================
+
+:SYS_INFO
+cls
+echo %BLUE%===================================================================================
+echo %CYAN%%BOLD%                     SYSTEM INFORMATION                                     
+echo %BLUE%===================================================================================%RESET%
+echo.
+systeminfo | findstr /B /C:"OS Name" /C:"OS Version" /C:"System Type" /C:"Total Physical Memory"
+echo %BLUE%-----------------------------------------------------------------------------------%RESET%
+echo   %CYAN%Current User  :%RESET% %WHITE%%USERNAME%%RESET%
+echo   %CYAN%Computer Name:%RESET% %WHITE%%COMPUTERNAME%%RESET%
+echo %BLUE%===================================================================================%RESET%
+echo.
+echo Press any key to return to launcher...
+pause >nul
+exit /b
+
+:PING_DIAG
+cls
+echo %BLUE%===================================================================================
+echo %CYAN%%BOLD%                     CONNECTIVITY DIAGNOSTICS                               
+echo %BLUE%===================================================================================%RESET%
+echo.
+echo %YELLOW%[+] Pinging Cloudflare DNS (1.1.1.1)...%RESET%
+ping 1.1.1.1 -n 4
+echo.
+echo %YELLOW%[+] Pinging Google DNS (8.8.8.8)...%RESET%
+ping 8.8.8.8 -n 4
+echo.
+echo %BLUE%===================================================================================%RESET%
+echo.
+echo Press any key to return to launcher...
+pause >nul
+exit /b
+
+:FLUSH_DNS
+cls
+echo %BLUE%===================================================================================
+echo %CYAN%%BOLD%                     FLUSH DNS RESOLVER CACHE                               
+echo %BLUE%===================================================================================%RESET%
+echo.
+echo %YELLOW%[+] Flushing DNS Cache...%RESET%
+
+:: Running ipconfig quietly prevents UTF-8 encoding crashes in converted EXEs
+ipconfig /flushdns >nul 2>&1
+
+echo.
+echo %GREEN%[✓] DNS Resolver Cache cleared successfully.%RESET%
+echo %BLUE%===================================================================================%RESET%
+echo.
+echo Press any key to return to launcher...
+pause >nul
+exit /b
+
+:TEMP_CLEAN
+cls
+echo %BLUE%===================================================================================
+echo %CYAN%%BOLD%                     USER TEMP FILES CLEANUP                                 
+echo %BLUE%===================================================================================%RESET%
+echo.
+echo %YELLOW%[+] Clearing temporary directory: %TEMP%%RESET%
+
+:: Suppressing file deletion standard output and directory removal errors prevents EXE crash
+del /q /f /s "%TEMP%\*" >nul 2>&1
+for /d %%i in ("%TEMP%\*") do rmdir /s /q "%%i" >nul 2>&1
+
+echo.
+echo %GREEN%[✓] Temporary files cleanup finished!%RESET%
+echo %BLUE%===================================================================================%RESET%
+echo.
+echo Press any key to return to launcher...
+pause >nul
+exit /b
+
+:FOLDER_BACKUP
+cls
+echo %BLUE%===================================================================================
+echo %CYAN%%BOLD%                     ROBOCOPY FOLDER BACKUP                                 
+echo %BLUE%===================================================================================%RESET%
+echo.
+set /p src="%CYAN%Enter Source Folder Path     : %RESET%"
+set /p dst="%CYAN%Enter Destination Folder Path: %RESET%"
+
+if not exist "%src%" (
+    echo.
+    echo %RED%[!] ERROR: Source directory does not exist.%RESET%
+    echo %BLUE%===================================================================================%RESET%
+    pause
+    exit /b
+)
+
+echo.
+echo %YELLOW%[+] Copying files...%RESET%
+robocopy "%src%" "%dst%" /MIR /FFT /R:1 /W:1 /NP /MT:8
+echo.
+echo %GREEN%[✓] Backup operation finished!%RESET%
+echo %BLUE%===================================================================================%RESET%
+echo.
+echo Press any key to return to launcher...
+pause >nul
+exit /b
+
+:WINGET_UPDATE
+cls
+echo %BLUE%===================================================================================
+echo %CYAN%%BOLD%                     WINGET PACKAGE UPDATER                                 
+echo %BLUE%===================================================================================%RESET%
+echo.
+echo %YELLOW%[+] Checking for available software updates...%RESET%
+echo.
+winget upgrade
+echo.
+echo %GRAY%[Tip] Run 'winget upgrade --all' in terminal to update every program automatically.%RESET%
+echo %BLUE%===================================================================================%RESET%
+echo.
+echo Press any key to return to launcher...
+pause >nul
+exit /b
+
+:BATTERY_MON
+:BATTERY_LOOP
+cls
+echo %BLUE%===================================================================================
+echo %CYAN%%BOLD%                     LIVE BATTERY MONITOR                                  
+echo %BLUE%===================================================================================%RESET%
+echo.
+powershell -Command "$b = Get-CimInstance -ClassName Win32_Battery; if ($b) { $status = switch ($b.BatteryStatus) { 1 {'Discharging'} 2 {'AC Power (Charging)'} 3 {'Fully Charged'} 4 {'Low'} 5 {'Critical'} default {'Unknown'} }; Write-Host '   Charge Level    : ' -NoNewline; Write-Host \"$($b.EstimatedChargeRemaining)%%\" -ForegroundColor Cyan; Write-Host '   Status          : ' -NoNewline; Write-Host \"$status\" -ForegroundColor Yellow; if ($b.EstimatedRunTime -and $b.EstimatedRunTime -lt 71582788) { Write-Host \"   Estimated Time  : $($b.EstimatedRunTime) Minutes\" -ForegroundColor White } else { Write-Host '   Estimated Time  : Calculating / On AC Power' -ForegroundColor Gray } } else { Write-Host '   [!] No battery detected on this system.' -ForegroundColor Red }"
+echo.
+echo %BLUE%-----------------------------------------------------------------------------------%RESET%
+echo   %GRAY%[%CYAN%R%GRAY%]%RESET% %WHITE%Refresh Stats%RESET%  ^|  %GRAY%[%YELLOW%B%GRAY%]%RESET% %WHITE%Back to Main Launcher%RESET%
+echo %BLUE%===================================================================================%RESET%
+echo.
+choice /c RB /t 3 /d R /n /m "Auto-refreshing in 3s... Press [B] to exit: "
+if %errorlevel%==2 exit /b
+goto BATTERY_LOOP
+
+:WIN_TOOLS
+cls
+echo %BLUE%===================================================================================
+echo %CYAN%%BOLD%                     QUICK WINDOWS TOOLS                                    
+echo %BLUE%===================================================================================%RESET%
+echo.
+echo %GREEN%[+] Opening Task Manager, Device Manager, and Control Panel...%RESET%
+start taskmgr.exe
+start devmgmt.msc
+start control
+echo.
+echo %BLUE%===================================================================================%RESET%
+echo.
+echo Press any key to return to launcher...
+pause >nul
+exit /b
+
+:WEB_SHORTCUTS
+:WEB_MENU
+cls
+echo %BLUE%===================================================================================
+echo %CYAN%%BOLD%                     WEB SHORTCUT UTILITY                                  
+echo %BLUE%===================================================================================%RESET%
+echo   %GRAY%[%CYAN%1%GRAY%]%RESET% %WHITE%Google%RESET%
+echo   %GRAY%[%CYAN%2%GRAY%]%RESET% %WHITE%YouTube%RESET%
+echo   %GRAY%[%CYAN%3%GRAY%]%RESET% %WHITE%GitHub%RESET%
+echo   %GRAY%[%CYAN%4%GRAY%]%RESET% %WHITE%ChatGPT%RESET%
+echo   %GRAY%[%CYAN%5%GRAY%]%RESET% %WHITE%Custom URL%RESET%
+echo %BLUE%-----------------------------------------------------------------------------------%RESET%
+echo   %GRAY%[%YELLOW%B%GRAY%]%RESET% %WHITE%Back to Launcher%RESET%
+echo %BLUE%===================================================================================%RESET%
+echo.
+set /p web_choice="%CYAN%%BOLD%WEB-SHELL%RESET% %GRAY%^>%RESET% "
+if "%web_choice%"=="1" start https://www.google.com & goto WEB_MENU
+if "%web_choice%"=="2" start https://www.youtube.com & goto WEB_MENU
+if "%web_choice%"=="3" start https://www.github.com & goto WEB_MENU
+if "%web_choice%"=="4" start https://chatgpt.com & goto WEB_MENU
+if "%web_choice%"=="5" (
+    echo.
+    set /p custom_url="%YELLOW%Enter website URL (e.g. https://example.com): %RESET%"
+    if defined custom_url start "" "!custom_url!"
+    goto WEB_MENU
+)
+if /i "%web_choice%"=="B" exit /b
+echo %RED%[!] Invalid option.%RESET%
+timeout /t 1 >nul
+goto WEB_MENU
+
+:WIFI_PASS
+cls
+echo %BLUE%===================================================================================
+echo %CYAN%%BOLD%                     SAVED WI-FI PASSWORDS                                  
+echo %BLUE%===================================================================================%RESET%
+echo.
+powershell -Command "netsh wlan show profiles | Select-String 'All User Profile' | ForEach-Object { $name = ($_ -split ':')[1].Trim(); $pass = (netsh wlan show profile name=$name key=clear | Select-String 'Key Content'); $key = if ($pass) { ($pass -split ':')[1].Trim() } else { 'None / Open' }; Write-Host '   SSID: ' -NoNewline; Write-Host $name.PadRight(25) -ForegroundColor Cyan -NoNewline; Write-Host ' Password: ' -NoNewline; Write-Host $key -ForegroundColor Yellow }"
+echo.
+echo %BLUE%===================================================================================%RESET%
+echo.
+echo Press any key to return to launcher...
+pause >nul
+exit /b
+
+:RAM_CLEANER
+:RAM_MENU
+cls
+echo %BLUE%===================================================================================
+echo %CYAN%%BOLD%                     RAM CLEANER ^& PROCESS MANAGER                        
+echo %BLUE%===================================================================================%RESET%
+echo  %WHITE%[Function]%RESET% Monitors top memory-consuming processes and frees up RAM by 
+echo             terminating unneeded, frozen, or background applications.
+echo %BLUE%-----------------------------------------------------------------------------------%RESET%
+echo.
+powershell -Command "Get-Process | Sort-Object WorkingSet64 -Descending | Select-Object -First 5 Name, @{Name='RAM (MB)'; Expression={[math]::Round($_.WorkingSet64 / 1MB, 2)}} | Format-Table -AutoSize"
+echo %BLUE%-----------------------------------------------------------------------------------%RESET%
+echo   %GRAY%[%RED%K%GRAY%]%RESET% %WHITE%Terminate Process to Free RAM%RESET%  ^|  %GRAY%[%YELLOW%B%GRAY%]%RESET% %WHITE%Back to Launcher%RESET%
+echo %BLUE%===================================================================================%RESET%
+echo.
+set /p act="%CYAN%%BOLD%ACTION%RESET% %GRAY%^>%RESET% "
+if /i "%act%"=="K" (
+    echo.
+    set /p pname="%YELLOW%Enter Process Name to Kill (e.g. chrome.exe): %RESET%"
+    if defined pname (
+        taskkill /f /im "!pname!"
+        echo %GREEN%[✓] Memory released for !pname!%RESET%
+    )
+    echo.
+    pause
+    goto RAM_MENU
+)
+if /i "%act%"=="B" exit /b
+goto RAM_MENU
+
+:DRIVE_SPACE
+cls
+echo %BLUE%===================================================================================
+echo %CYAN%%BOLD%                     DRIVE STORAGE SPACE                                    
+echo %BLUE%===================================================================================%RESET%
+echo.
+powershell -Command "Get-CimInstance Win32_LogicalDisk | Where-Object { $_.Size -gt 0 } | ForEach-Object { $free = [math]::Round($_.FreeSpace / 1GB, 2); $total = [math]::Round($_.Size / 1GB, 2); $pct = [math]::Round(($free / $total) * 100, 1); Write-Host '   Drive ' -NoNewline; Write-Host \"$($_.DeviceID)\" -ForegroundColor Cyan -NoNewline; Write-Host \"  Free: $free GB / $total GB ($pct%% free)\" -ForegroundColor Yellow }"
+echo.
+echo %BLUE%===================================================================================%RESET%
+echo.
+echo Press any key to return to launcher...
+pause >nul
+exit /b
+
+:QUICK_TOGGLES
+:TOGGLE_MENU
+cls
+echo %BLUE%===================================================================================
+echo %CYAN%%BOLD%                     SYSTEM QUICK TOGGLES                                   
+echo %BLUE%===================================================================================%RESET%
+echo   %GRAY%[%CYAN%1%GRAY%]%RESET% %WHITE%Restart Windows Explorer (Fix Taskbar Glitches)%RESET%
+echo   %GRAY%[%CYAN%2%GRAY%]%RESET% %WHITE%Enable System Dark Mode%RESET%
+echo   %GRAY%[%CYAN%3%GRAY%]%RESET% %WHITE%Enable System Light Mode%RESET%
+echo %BLUE%-----------------------------------------------------------------------------------%RESET%
+echo   %GRAY%[%YELLOW%B%GRAY%]%RESET% %WHITE%Back to Launcher%RESET%
+echo %BLUE%===================================================================================%RESET%
+echo.
+set /p tog="%CYAN%%BOLD%TOGGLE-SHELL%RESET% %GRAY%^>%RESET% "
+if "%tog%"=="1" (
+    echo.
+    echo %YELLOW%[+] Restarting Explorer...%RESET%
+    taskkill /f /im explorer.exe >nul 2>&1
+    start explorer.exe
+    echo %GREEN%[✓] Explorer restarted.%RESET%
+    timeout /t 2 >nul
+    goto TOGGLE_MENU
+)
+if "%tog%"=="2" (
+    reg add HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize /v AppsUseLightTheme /t REG_DWORD /d 0 /f >nul
+    reg add HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize /v SystemUsesLightTheme /t REG_DWORD /d 0 /f >nul
+    echo %GREEN%[✓] Dark Mode enabled.%RESET%
+    timeout /t 2 >nul
+    goto TOGGLE_MENU
+)
+if "%tog%"=="3" (
+    reg add HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize /v AppsUseLightTheme /t REG_DWORD /d 1 /f >nul
+    reg add HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize /v SystemUsesLightTheme /t REG_DWORD /d 1 /f >nul
+    echo %GREEN%[✓] Light Mode enabled.%RESET%
+    timeout /t 2 >nul
+    goto TOGGLE_MENU
+)
+if /i "%tog%"=="B" exit /b
+goto TOGGLE_MENU
