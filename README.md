@@ -12,7 +12,7 @@ For the pre-compiled, ready-to-run executable, download `QUICKUTILS.exe` directl
 - **Automation & System Toggles:** Execute directory backups using Robocopy, update system software via `winget`, inspect live battery telemetry, restart Explorer.exe, and toggle Windows Dark/Light modes via registry tweaks.
 ---
 ## 📂 Repository Structure
-
+**Note on Windows SmartScreen:** Because this `.exe` is newly compiled and unsigned, Windows SmartScreen may show a warning prompt. Click **More info** -> **Run anyway**. You can review the raw source code in `QUICKUTILS.bat` at any time.
 ```text
 QUICKUTILS-Suite/
 ├── QUICKUTILS.bat    # Source Batch script
